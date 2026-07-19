@@ -24,6 +24,7 @@ export default defineConfig({
   build: {
     sourcemap: true,
     lib: {
+      cssFileName: 'style',
       entry: path.resolve(__dirname, './index.ts'),
       name: 'toolbar-generate-code',
       fileName: (_format, entryName) => `${entryName}.js`,

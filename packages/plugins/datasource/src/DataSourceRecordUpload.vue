@@ -10,7 +10,7 @@
           ref="upload"
           size="small"
           action="/"
-          accept="xlsx"
+          accept=".xlsx"
           :before-upload="beforeUpload"
           :show-file-list="false"
           :limit="1"
@@ -48,13 +48,18 @@
         <span class="confirm">当前文件已超出限制</span>
         <span>，最大不超过4MB</span>
       </div>
+
+      <div v-if="state.upload.parseError" class="import-tip">
+        <span class="confirm">文件解析失败</span>
+        <span>，请检查表格内容、行数和列数</span>
+      </div>
     </template>
     <template #footer>
       <tiny-file-upload
         ref="upload"
         size="small"
         action="/"
-        accept="xlsx"
+        accept=".xlsx"
         :before-upload="beforeUpload"
         :show-file-list="false"
         :limit="1"
@@ -73,11 +78,10 @@
 import { reactive, watch } from 'vue'
 import { Button, Modal, FileUpload } from '@opentiny/vue'
 import { getDataFromFile } from './js/datasource'
+import { validateImportFile } from './js/importValidation'
 import { IconHelp } from '@opentiny/vue-icon'
 
 const MIME_TYPE_XLSX = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-const FILE_SIZE_MAX = 4
-
 export default {
   components: {
     TinyButton: Button,
@@ -101,6 +105,7 @@ export default {
         showImportFail: false,
         typeError: false,
         sizeExceed: false,
+        parseError: false,
         importData: []
       }
     })
@@ -117,9 +122,10 @@ export default {
     }
 
     const beforeUpload = async (file) => {
-      const typeValid = file.type === MIME_TYPE_XLSX
-      const sizeValid = file.size / 1024 / 1024 < FILE_SIZE_MAX
-      const isValid = typeValid && sizeValid
+      const { typeValid, sizeValid, isValid } = validateImportFile(file, MIME_TYPE_XLSX)
+      state.upload.typeError = false
+      state.upload.sizeExceed = false
+      state.upload.parseError = false
       if (isValid) {
         state.upload.importConfirm = true
       } else {
@@ -129,9 +135,22 @@ export default {
       }
       closeImportModal()
 
-      const data = await getDataFromFile(file)
-      state.upload.importData = data
-      state.upload.importSuccessLabel = importSuccessLabel.replace('{0}', state.upload.importData.length)
+      if (!isValid) {
+        return false
+      }
+
+      try {
+        const data = await getDataFromFile(file)
+        state.upload.importData = data
+        state.upload.importSuccessLabel = importSuccessLabel.replace('{0}', state.upload.importData.length)
+      } catch {
+        state.upload.importConfirm = false
+        state.upload.showImportFail = true
+        state.upload.typeError = false
+        state.upload.sizeExceed = false
+        state.upload.parseError = true
+        return false
+      }
 
       return false
     }

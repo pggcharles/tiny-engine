@@ -23,6 +23,7 @@ export default defineConfig({
   resolve: {},
   build: {
     lib: {
+      cssFileName: 'style',
       entry: path.resolve(__dirname, './index.ts'),
       name: 'plugin-bridge',
       fileName: (_format, entryName) => `${entryName}.js`,

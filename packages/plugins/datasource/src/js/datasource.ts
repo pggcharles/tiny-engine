@@ -16,9 +16,12 @@ import { useResource } from '@opentiny/tiny-engine-meta-register'
 import { isMock } from '@opentiny/tiny-engine-common/js/environments'
 import { utils as commonUtils, constants } from '@opentiny/tiny-engine-utils'
 import { read, utils, writeFileXLSX } from 'xlsx'
+import { assertImportFileSize, MAX_IMPORT_COLUMNS, MAX_IMPORT_ROWS } from './importValidation'
 
 const { DEFAULT_INTERCEPTOR } = constants
 const { parseFunction: generateFunction } = commonUtils
+
+const UNSAFE_KEYS = new Set(['__proto__', 'prototype', 'constructor'])
 
 const load = (http, options, dataSource, shouldFetch) => (params, customUrl) => {
   if (!shouldFetch()) {
@@ -117,19 +120,56 @@ export const getRequest = (config) => {
 
 export const handleImportedData = (columns, importData) => {
   const titleMap = columns.reduce((prev, cur) => {
-    prev[cur.title] = cur.name
+    if (
+      typeof cur.title === 'string' &&
+      !UNSAFE_KEYS.has(cur.title) &&
+      typeof cur.name === 'string' &&
+      !UNSAFE_KEYS.has(cur.name)
+    ) {
+      prev[cur.title] = cur.name
+    }
+
     return prev
-  }, {})
+  }, Object.create(null))
+
   return importData
-    .map((item) => Object.fromEntries(Object.entries(item).map(([key, value]) => [titleMap[key], value])))
+    .filter((item) => item && typeof item === 'object' && !Array.isArray(item))
+    .map((item) =>
+      Object.fromEntries(
+        Object.entries(item)
+          .filter(([key]) => !UNSAFE_KEYS.has(key) && titleMap[key])
+          .map(([key, value]) => [titleMap[key], value])
+      )
+    )
     .map((item) => {
       return { ...item, _id: item._id || commonUtils.guid() }
     })
 }
 
 export const getDataFromFile = async (file) => {
-  const wb = read(await file.arrayBuffer())
-  const array = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]])
+  if (!file || typeof file.arrayBuffer !== 'function') {
+    throw new TypeError('Invalid spreadsheet file')
+  }
+
+  assertImportFileSize(file)
+
+  const wb = read(await file.arrayBuffer(), {
+    cellFormula: false,
+    cellHTML: false,
+    cellNF: false,
+    cellStyles: false,
+    sheetRows: MAX_IMPORT_ROWS + 2
+  })
+  const firstSheet = wb.Sheets[wb.SheetNames[0]]
+  const array = utils.sheet_to_json(firstSheet, { raw: true })
+
+  if (array.length > MAX_IMPORT_ROWS) {
+    throw new RangeError(`Spreadsheet contains more than ${MAX_IMPORT_ROWS} rows`)
+  }
+
+  if (array.some((item) => Object.keys(item).length > MAX_IMPORT_COLUMNS)) {
+    throw new RangeError(`Spreadsheet contains more than ${MAX_IMPORT_COLUMNS} columns`)
+  }
 
   return array
 }

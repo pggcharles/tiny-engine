@@ -83,6 +83,7 @@ export default defineConfig({
         index: path.resolve(__dirname, 'index.js')
       },
       name: 'tiny-engine',
+      cssFileName: 'style',
       fileName: (_, entryName) => `${entryName}.js`,
       formats: ['es']
     },

@@ -22,6 +22,7 @@ export default defineConfig({
   resolve: {},
   build: {
     lib: {
+      cssFileName: 'style',
       entry: path.resolve(__dirname, './index.js'),
       fileName: () => 'index.js',
       formats: ['es']

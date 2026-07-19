@@ -10,7 +10,8 @@
  *
  */
 import { Command, Option } from 'commander'
-import { input, select } from '@inquirer/prompts'
+import input from '@inquirer/input'
+import select from '@inquirer/select'
 import { createPlatform, createPlugin, createTheme } from './commands/create.js'
 
 const program = new Command()

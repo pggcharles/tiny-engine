@@ -6,7 +6,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import nodeGlobalsPolyfillPluginCjs from '@esbuild-plugins/node-globals-polyfill'
 import nodeModulesPolyfillPluginCjs from '@esbuild-plugins/node-modules-polyfill'
 import nodePolyfill from 'rollup-plugin-polyfill-node'
-import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import { createSvgIconsPlugin } from './vite-plugins/svgIconsPlugin.js'
 import visualizerCjs from 'rollup-plugin-visualizer'
 import generateComment from '@opentiny/tiny-engine-vite-plugin-meta-comments'
 import { getBaseUrlFromCli, copyBundleDeps, importMapLocalPlugin } from './localCdnFile/index.js'
@@ -34,8 +34,12 @@ const getDefaultConfig = (engineConfig) => {
     },
     server: {
       // 这里保证本地启动服务是localhost,支持js多线程和谷歌浏览器读写本地文件api
+      host: 'localhost',
       port: 8080,
       open: '/?type=app&id=1&tenant=1',
+      fs: {
+        strict: true
+      },
       proxy: {
         '/app-center/v1/api': {
           target: origin,

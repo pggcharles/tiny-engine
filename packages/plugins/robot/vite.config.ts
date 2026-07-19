@@ -24,6 +24,7 @@ export default defineConfig({
   build: {
     sourcemap: true,
     lib: {
+      cssFileName: 'style',
       entry: path.resolve(__dirname, './index.ts'),
       name: 'plugin-robot',
       fileName: (_format, entryName) => `${entryName}.js`,
@@ -33,7 +34,7 @@ export default defineConfig({
       output: {
         banner: 'import "./style.css"'
       },
-      external: ['vue', /@opentiny\/tiny-engine.*/, '@opentiny/tiny-schema-renderer', /@opentiny\/vue.*/]
+      external: ['vue', /@opentiny\/tiny-engine.*/, /@opentiny\/vue.*/]
     }
   }
 })

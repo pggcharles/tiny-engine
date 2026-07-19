@@ -17,7 +17,7 @@ export default (schema, options = {}) => {
       '@opentiny/tiny-engine-i18n-host': '^2.8.0',
       '@opentiny/vue': '^3.20.0',
       '@opentiny/vue-icon': '^3.20.0',
-      axios: '^0.30.1',
+      axios: '^1.18.1',
       'axios-mock-adapter': '^1.19.0',
       vue: '^3.3.9',
       'vue-i18n': '^9.2.0-beta.3',
@@ -25,9 +25,9 @@ export default (schema, options = {}) => {
       pinia: '^2.1.7'
     },
     devDependencies: {
-      '@vitejs/plugin-vue': '^5.1.2',
-      '@vitejs/plugin-vue-jsx': '^4.0.1',
-      vite: '^5.4.2'
+      '@vitejs/plugin-vue': '^5.2.4',
+      '@vitejs/plugin-vue-jsx': '^4.2.0',
+      vite: '^6.4.3'
     }
   }
 

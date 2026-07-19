@@ -1,6 +1,7 @@
 {
   "name": "tiny-engine",
   "private": true,
+  "packageManager": "pnpm@9.15.9",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "pnpm run setup && concurrently 'pnpm:serve:backend' 'pnpm:serve:frontend'",
@@ -54,15 +55,12 @@
     "not dead"
   ],
   "engines": {
-    "node": ">=16",
+    "node": ">=18.12",
     "pnpm": ">=8"
   },
   "pnpm": {
     "patchedDependencies": {
       "@vue/repl@4.6.1": "patches/@vue__repl@4.6.1.patch"
-    },
-    "overrides": {
-      "rollup": "~4.44.0"
     }
   }
 }

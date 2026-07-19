@@ -18,6 +18,7 @@ export default defineConfig({
   publicDir: false,
   build: {
     lib: {
+      cssFileName: 'style',
       entry: path.resolve(__dirname, './index.js'),
       fileName: () => 'index.js',
       formats: ['es']

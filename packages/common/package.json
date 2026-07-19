@@ -48,7 +48,7 @@
     "@opentiny/tiny-engine-utils": "workspace:*",
     "@vue/shared": "^3.3.4",
     "@vueuse/core": "^9.6.0",
-    "axios": "~0.28.0",
+    "axios": "^1.18.1",
     "css-tree": "^2.3.1",
     "eslint-linter-browserify": "8.57.0",
     "monaco-editor": "0.51.0",
@@ -62,12 +62,12 @@
     "@types/babel__traverse": "^7.28.0",
     "@types/css-tree": "2.3.11",
     "@types/prettier": "^2.7.0",
-    "@vitejs/plugin-vue": "^5.1.2",
-    "@vitejs/plugin-vue-jsx": "^4.0.1",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vitejs/plugin-vue-jsx": "^4.2.0",
     "glob": "^10.3.4",
-    "vite": "^5.4.2",
+    "vite": "^6.4.3",
     "vite-plugin-dts": "^4.5.4",
-    "vite-plugin-static-copy": "^1.0.6"
+    "vite-plugin-static-copy": "^2.3.2"
   },
   "peerDependencies": {
     "@opentiny/vue": "^3.20.0",

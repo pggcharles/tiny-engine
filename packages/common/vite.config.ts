@@ -61,6 +61,7 @@ export default defineConfig({
     sourcemap: true,
     cssCodeSplit: false,
     lib: {
+      cssFileName: 'style',
       entry: {
         index: path.resolve(__dirname, './index.ts'),
         ...Object.fromEntries(jsEntries)

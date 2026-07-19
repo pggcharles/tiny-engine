@@ -3,7 +3,6 @@ node_modules
 dist/
 package-lock.json
 yarn.lock
-pnpm-lock.yaml
 lerna-debug.log
 packages/design-core/bundle-deps
 designer-demo/bundle-deps

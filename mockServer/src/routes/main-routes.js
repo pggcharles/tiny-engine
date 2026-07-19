@@ -12,7 +12,7 @@
 
 import fs from 'fs-extra'
 import * as glob from 'glob'
-import KoaRouter from 'koa-router'
+import KoaRouter from '@koa/router'
 import path from 'path'
 import MockService from '../services/mockService'
 import { getResponseData } from '../tool/Common'

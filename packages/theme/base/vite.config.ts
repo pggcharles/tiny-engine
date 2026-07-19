@@ -26,6 +26,7 @@ export default defineConfig({
   build: {
     sourcemap: true,
     lib: {
+      cssFileName: 'style',
       entry: path.resolve(__dirname, './src/index.ts'),
       name: 'theme-base',
       fileName: (_format, entryName) => `${entryName}.js`,

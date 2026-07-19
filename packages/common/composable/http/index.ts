@@ -114,6 +114,15 @@ const resetAuthState = () => {
   abortControllers.clear()
 }
 
+const isSameOriginRequest = (config: AxiosRequestConfig): boolean => {
+  try {
+    const baseUrl = config.baseURL ? new URL(config.baseURL, window.location.origin) : new URL(window.location.origin)
+    return new URL(config.url || '', baseUrl).origin === window.location.origin
+  } catch {
+    return false
+  }
+}
+
 // 创建 AbortController 并关联到请求
 const createAbortController = (config) => {
   const controller = new AbortController()
@@ -201,7 +210,7 @@ const requestHandler = (config) => {
     if (isUnauthorized) {
       resetAuthState()
     }
-    if (!notAuthList.some((url) => config.url.includes(url))) {
+    if (!notAuthList.some((url) => config.url.includes(url)) && isSameOriginRequest(config)) {
       config.headers.Authorization = `Bearer ${token}`
     }
   }

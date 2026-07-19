@@ -23,6 +23,7 @@ export default defineConfig({
   build: {
     sourcemap: true,
     lib: {
+      cssFileName: 'style',
       entry: path.resolve(__dirname, './src/lib.ts'),
       name: 'setting-design',
       fileName: (_format, entryName) => `${entryName}.js`,
